@@ -23,6 +23,7 @@ func _physics_process(delta):
 			velocity.y += gravity * delta
 		
 		var direction = Input.get_axis("ui_left", 'ui_right')
+
 		
 		if direction:
 			is_sliding = false
@@ -68,13 +69,13 @@ func _physics_process(delta):
 			if Input.is_action_pressed("ui_right") and Input.is_action_pressed("ui_up"):
 				velocity.x = DASH_SPEED
 				velocity.y = -DASH_SPEED
-			elif Input.is_action_pressed("ui_left") and Input.is_action_pressed("ui_up"):
+			elif Input.is_action_pressed("move_left") and Input.is_action_pressed("jump"):
 				velocity.x = -DASH_SPEED
 				velocity.y = -DASH_SPEED
-			elif Input.is_action_pressed("ui_left") and Input.is_action_pressed("ui_down"):
+			elif Input.is_action_pressed("move_left") and Input.is_action_pressed("ui_down"):
 				velocity.x = -DASH_SPEED
 				velocity.y = DASH_SPEED
-			elif Input.is_action_pressed("ui_right") and Input.is_action_pressed("ui_down"):
+			elif Input.is_action_pressed("move_right") and Input.is_action_pressed("ui_down"):
 				velocity.x = DASH_SPEED
 				velocity.y = DASH_SPEED
 			elif last_direction > 0:
