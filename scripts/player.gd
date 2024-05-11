@@ -15,6 +15,9 @@ var last_direction = 1
 var is_dashing = 0
 var is_sliding= false
 
+@onready var weapons = $Weapon
+@onready var sword = $Weapon/Sword
+@onready var animations = $AnimationPlayer
 @onready var animated_sprite = $AnimatedSprite2D
 
 func _physics_process(delta):
@@ -45,6 +48,7 @@ func _physics_process(delta):
 		var direction = Input.get_axis("ui_left", 'ui_right')
 		
 		if direction:
+			print(direction)
 			is_sliding = false
 			if current_accel == 0:
 				current_accel = 13 * direction
@@ -66,6 +70,10 @@ func _physics_process(delta):
 		animated_sprite.flip_h = last_direction == -1
 		
 		velocity.x = move_toward(clamp(velocity.x + current_accel, -TOP_SPEED, TOP_SPEED), 0, 600*delta)
+		
+		if Input.is_action_just_pressed("attack"):
+			if(last_direction==1):attack_right()
+			if(last_direction==-1):attack_left()
 		
 		# dash
 		if Input.is_action_just_pressed("dash"):
@@ -103,3 +111,17 @@ func _physics_process(delta):
 func _on_dash_time_timeout():
 	velocity.y = 0
 	is_dashing = false
+
+func attack_right():
+	animations.play("attack-right")
+	weapons.enable()
+	await animations.animation_finished
+	weapons.disable()
+	animations.stop()
+
+func attack_left():
+	animations.play("attack-left")
+	weapons.enable()
+	await animations.animation_finished
+	weapons.disable()
+	animations.stop()

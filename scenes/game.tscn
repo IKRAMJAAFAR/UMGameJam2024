@@ -572,3 +572,6 @@ theme_override_fonts/font = ExtResource("7_wby2a")
 theme_override_font_sizes/font_size = 8
 text = "You made it!"
 horizontal_alignment = 1
+
+[node name="Slime2" parent="." instance=ExtResource("6_txt4n")]
+position = Vector2(134, -34)
