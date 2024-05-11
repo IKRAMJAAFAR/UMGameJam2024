@@ -15,6 +15,10 @@ var can_dash = true  # New variable to track if the player can dash
 var is_sliding = false
 var first_jump = true
 var second_jump = true
+
+@onready var weapons = $Weapon
+@onready var sword = $Weapon/Sword
+@onready var animations = $AnimationPlayer
 @onready var animated_sprite = $AnimatedSprite2D
 
 func _physics_process(delta):
@@ -22,11 +26,10 @@ func _physics_process(delta):
 		if not is_on_floor():
 			velocity.y += gravity * delta
 		
-		var direction = Input.get_axis("ui_left", 'ui_right')
+		var direction = Input.get_axis("move_left", 'move_right')
 
 		
 		if direction:
-			print(direction)
 			is_sliding = false
 			if current_accel == 0:
 				current_accel = 13 * direction
@@ -39,14 +42,14 @@ func _physics_process(delta):
 			
 		if is_on_floor():
 			_on_Foot_area_body_entered(self)
-			if Input.is_action_just_pressed("ui_accept"):
+			if Input.is_action_just_pressed("jump"):
 				velocity.y = JUMP_VELOCITY
 			if direction == 0:
 				animated_sprite.play("idle")
 			else:
 				animated_sprite.play("run")
 		else:
-			if Input.is_action_just_pressed("ui_accept") and (first_jump or second_jump):
+			if Input.is_action_just_pressed("jump") and (first_jump or second_jump):
 				animated_sprite.play("jumping")
 				if first_jump:
 					first_jump = false
@@ -72,7 +75,7 @@ func _physics_process(delta):
 			can_dash = false  # Set can_dash to false when dashing
 			
 			
-			if Input.is_action_pressed("ui_right") and Input.is_action_pressed("ui_up"):
+			if Input.is_action_pressed("move_right") and Input.is_action_pressed("ui_up"):
 				velocity.x = DASH_SPEED
 				velocity.y = -DASH_SPEED
 			elif Input.is_action_pressed("move_left") and Input.is_action_pressed("jump"):
