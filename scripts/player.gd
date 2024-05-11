@@ -14,7 +14,6 @@ var is_dashing = false
 var can_dash = true  # New variable to track if the player can dash
 var is_sliding = false
 var first_jump = true
-var second_jump = true
 
 @onready var weapons = $Weapon
 @onready var sword = $Weapon/Sword
@@ -23,12 +22,32 @@ var second_jump = true
 
 func _physics_process(delta):
 	if not is_dashing:
+		
 		if not is_on_floor():
-			velocity.y += gravity * delta
-		
-		var direction = Input.get_axis("move_left", 'move_right')
+			velocity.y += gravity * delta #
+			
+		if is_on_wall() and (Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right")):
+			is_sliding = true
+			first_jump = false	
 
-		
+		if is_sliding:
+			velocity.y = min(velocity.y + gravity, 60)
+			#print("ON WALL " + str(velocity.y))
+
+			if Input.is_action_pressed("jump"):
+				velocity.y = JUMP_VELOCITY
+				velocity.x = 550 * -last_direction
+				is_sliding = false
+
+			if is_on_floor():
+				is_sliding = false
+			
+			if Input.is_action_pressed("jump") and is_on_floor():
+				velocity.y = JUMP_VELOCITY
+				last_direction = 0
+			
+		var direction = Input.get_axis("move_left", 'move_right') #
+
 		if direction:
 			is_sliding = false
 			if current_accel == 0:
@@ -42,6 +61,10 @@ func _physics_process(delta):
 			
 		if is_on_floor():
 			_on_Foot_area_body_entered(self)
+			if is_sliding:
+				velocity.y = min(velocity.y + gravity, 60)
+			
+			is_sliding = false
 			if Input.is_action_just_pressed("jump"):
 				velocity.y = JUMP_VELOCITY
 			if direction == 0:
@@ -49,15 +72,10 @@ func _physics_process(delta):
 			else:
 				animated_sprite.play("run")
 		else:
-			if Input.is_action_just_pressed("jump") and (first_jump or second_jump):
+			if Input.is_action_just_pressed("jump") and first_jump:
 				animated_sprite.play("jumping")
-				if first_jump:
-					first_jump = false
-					velocity.y = JUMP_VELOCITY
-					animated_sprite.play("run")
-				if second_jump:
-					second_jump = false
-					velocity.y = JUMP_VELOCITY
+				velocity.y = JUMP_VELOCITY
+				first_jump = false
 			
 		
 		animated_sprite.flip_h = last_direction == -1
@@ -81,7 +99,7 @@ func _physics_process(delta):
 			elif Input.is_action_pressed("move_left") and Input.is_action_pressed("jump"):
 				velocity.x = -DASH_SPEED
 				velocity.y = -DASH_SPEED
-			elif Input.is_action_pressed("move_left") and Input.is_action_pressed("ui_down"):
+			elif Input.is_action_pressed("move_left") and Input.is_action_pressed(""):
 				velocity.x = -DASH_SPEED
 				velocity.y = DASH_SPEED
 			elif Input.is_action_pressed("move_right") and Input.is_action_pressed("ui_down"):
@@ -121,5 +139,4 @@ func attack_left():
 
 func _on_Foot_area_body_entered(body):
 	first_jump = true
-	second_jump = true
 	can_dash = true  # Set can_dash to true when the player touches the ground
