@@ -1,7 +1,9 @@
-[gd_scene load_steps=26 format=3 uid="uid://7ykfpgxwn4q3"]
+[gd_scene load_steps=32 format=3 uid="uid://7ykfpgxwn4q3"]
 
 [ext_resource type="Texture2D" uid="uid://e4mp43g5txkh" path="res://assets/sprites/knight.png" id="1_pxobd"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_t70lm"]
+[ext_resource type="Script" path="res://scripts/Weapon.gd" id="3_07xy5"]
+[ext_resource type="PackedScene" uid="uid://bw80mn20w5g02" path="res://scenes/sword.tscn" id="4_ltt78"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h243n"]
 atlas = ExtResource("1_pxobd")
@@ -171,6 +173,132 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_upp17"]
 radius = 5.0
 
+[sub_resource type="Animation" id="Animation_6e2mi"]
+resource_name = "attack-right"
+length = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Weapon:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.5708]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Weapon:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Weapon:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, -3)]
+}
+
+[sub_resource type="Animation" id="Animation_ejdhq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Weapon:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Weapon:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, -1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Weapon:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, -3)]
+}
+
+[sub_resource type="Animation" id="Animation_kuv2e"]
+resource_name = "attack-left"
+length = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Weapon:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.149952),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [3.14159, 1.5708]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Weapon:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.149191),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, -1), Vector2(1, -1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Weapon:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, -3)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_n2ssc"]
+_data = {
+"RESET": SubResource("Animation_ejdhq"),
+"attack-left": SubResource("Animation_kuv2e"),
+"attack-right": SubResource("Animation_6e2mi")
+}
+
 [node name="Player" type="CharacterBody2D"]
 z_index = 5
 collision_layer = 2
@@ -179,7 +307,7 @@ script = ExtResource("1_t70lm")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_6x114")
-animation = &"jumping"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -189,5 +317,19 @@ shape = SubResource("CircleShape2D_upp17")
 [node name="DashTime" type="Timer" parent="."]
 wait_time = 0.291
 one_shot = true
+
+[node name="Weapon" type="Node2D" parent="."]
+visible = false
+position = Vector2(2, -3)
+scale = Vector2(1, -1)
+script = ExtResource("3_07xy5")
+
+[node name="Sword" parent="Weapon" instance=ExtResource("4_ltt78")]
+position = Vector2(4, -6)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_n2ssc")
+}
 
 [connection signal="timeout" from="DashTime" to="." method="_on_dash_time_timeout"]

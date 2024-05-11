@@ -26,6 +26,7 @@ func _physics_process(delta):
 
 		
 		if direction:
+			print(direction)
 			is_sliding = false
 			if current_accel == 0:
 				current_accel = 13 * direction
@@ -59,6 +60,11 @@ func _physics_process(delta):
 		animated_sprite.flip_h = last_direction == -1
 		
 		velocity.x = move_toward(clamp(velocity.x + current_accel, -TOP_SPEED, TOP_SPEED), 0, 600*delta)
+		
+
+		if Input.is_action_just_pressed("attack"):
+			if(last_direction==1):attack_right()
+			if(last_direction==-1):attack_left()
 		
 		if Input.is_action_just_pressed("dash") and can_dash:  # Check if the player can dash
 			current_accel = 0
@@ -95,6 +101,20 @@ func _physics_process(delta):
 func _on_dash_time_timeout():
 	velocity.y = 0
 	is_dashing = false
+
+func attack_right():
+	animations.play("attack-right")
+	weapons.enable()
+	await animations.animation_finished
+	weapons.disable()
+	animations.stop()
+
+func attack_left():
+	animations.play("attack-left")
+	weapons.enable()
+	await animations.animation_finished
+	weapons.disable()
+	animations.stop()
 
 func _on_Foot_area_body_entered(body):
 	first_jump = true
