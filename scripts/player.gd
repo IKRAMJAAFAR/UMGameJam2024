@@ -25,14 +25,14 @@ func _physics_process(delta):
 		if not is_on_floor():
 			velocity.y += gravity * delta
 		
-		if is_on_wall() and (Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right")):
+		if is_on_wall() and (Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right")):
 			is_sliding = true
 		
 		if is_sliding:
 			velocity.y = min(velocity.y + gravity, 60)
 			#print("ON WALL " + str(velocity.y))
 			
-			if Input.is_action_pressed("ui_up"):
+			if Input.is_action_pressed("jump"):
 				velocity.y = JUMP_VELOCITY
 				velocity.x = 550 * -last_direction
 				is_sliding = false
@@ -40,12 +40,12 @@ func _physics_process(delta):
 			if is_on_floor():
 				is_sliding = false
 		else:
-			if Input.is_action_pressed("ui_up") and is_on_floor():
+			if Input.is_action_pressed("jump") and is_on_floor():
 				velocity.y = JUMP_VELOCITY
 			
 				last_direction = 0
 		
-		var direction = Input.get_axis("ui_left", 'ui_right')
+		var direction = Input.get_axis("move_left", 'move_right')
 		
 		if direction:
 			print(direction)
@@ -79,16 +79,16 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("dash"):
 			current_accel = 0
 			is_dashing = true
-			if Input.is_action_pressed("ui_right") and Input.is_action_pressed("ui_up"):
+			if Input.is_action_pressed("move_right") and Input.is_action_pressed("jump"):
 				velocity.x = DASH_SPEED
 				velocity.y = -DASH_SPEED
-			elif Input.is_action_pressed("ui_left") and Input.is_action_pressed("ui_up"):
+			elif Input.is_action_pressed("move_left") and Input.is_action_pressed("jump"):
 				velocity.x = -DASH_SPEED
 				velocity.y = -DASH_SPEED
-			elif Input.is_action_pressed("ui_left") and Input.is_action_pressed("ui_down"):
+			elif Input.is_action_pressed("move_left") and Input.is_action_pressed("ui_down"):
 				velocity.x = -DASH_SPEED
 				velocity.y = DASH_SPEED
-			elif Input.is_action_pressed("ui_right") and Input.is_action_pressed("ui_down"):
+			elif Input.is_action_pressed("move_right") and Input.is_action_pressed("ui_down"):
 				velocity.x = DASH_SPEED
 				velocity.y = DASH_SPEED
 			elif last_direction > 0:

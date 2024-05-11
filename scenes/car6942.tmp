@@ -1,0 +1,77 @@
+[gd_scene load_steps=7 format=3 uid="uid://c2qdw76plkbhd"]
+
+[ext_resource type="Texture2D" uid="uid://bnuwdct1y2oea" path="res://assets/sprites/cardBacks.png" id="1_n4hgk"]
+[ext_resource type="Script" path="res://Scripts/card.gd" id="1_ryvcj"]
+
+[sub_resource type="Animation" id="Animation_wm061"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("cardBacks:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(46, 64)]
+}
+
+[sub_resource type="Animation" id="Animation_grplk"]
+resource_name = "deselect"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("cardBacks:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(46, 29), Vector2(46, 64)]
+}
+
+[sub_resource type="Animation" id="Animation_p3awc"]
+resource_name = "select"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("cardBacks:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(46, 64), Vector2(46, 29)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3oc0e"]
+_data = {
+"RESET": SubResource("Animation_wm061"),
+"deselect": SubResource("Animation_grplk"),
+"select": SubResource("Animation_p3awc")
+}
+
+[node name="Card" type="Container"]
+custom_minimum_size = Vector2(105, 136)
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_ryvcj")
+
+[node name="cardBacks" type="Sprite2D" parent="."]
+position = Vector2(46, 64)
+texture = ExtResource("1_n4hgk")
+hframes = 4
+vframes = 5
+
+[node name="Anim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_3oc0e")
+}
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

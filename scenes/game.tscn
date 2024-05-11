@@ -1,11 +1,13 @@
-[gd_scene load_steps=16 format=3 uid="uid://b5e3nt4873ohw"]
+[gd_scene load_steps=18 format=3 uid="uid://b5e3nt4873ohw"]
 
 [ext_resource type="Texture2D" uid="uid://dkeleurgby5xp" path="res://assets/sprites/world_tileset.png" id="1_n8yqc"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_ow4nk"]
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_qoiqr"]
 [ext_resource type="PackedScene" uid="uid://7ykfpgxwn4q3" path="res://scenes/player.tscn" id="1_y65v6"]
 [ext_resource type="FontFile" uid="uid://cjsa727tbh14n" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_t31o1"]
 [ext_resource type="PackedScene" uid="uid://rampuxb1yaj1" path="res://scenes/platform.tscn" id="3_pabhg"]
 [ext_resource type="PackedScene" uid="uid://f41tvkr1ib6a" path="res://scenes/coin.tscn" id="4_kufol"]
+[ext_resource type="PackedScene" uid="uid://c2qdw76plkbhd" path="res://scenes/card.tscn" id="5_qiqea"]
 [ext_resource type="PackedScene" uid="uid://detvyjag7513l" path="res://scenes/killzone.tscn" id="5_ynjrl"]
 [ext_resource type="PackedScene" uid="uid://dy2tgej8cwxe6" path="res://scenes/slime.tscn" id="6_txt4n"]
 [ext_resource type="FontFile" uid="uid://dq42lisun1d70" path="res://assets/fonts/PixelOperator8.ttf" id="7_wby2a"]
@@ -455,6 +457,7 @@ _data = {
 }
 
 [node name="Game" type="Node2D"]
+script = ExtResource("1_qoiqr")
 
 [node name="GameManager" type="Node" parent="."]
 unique_name_in_owner = true
@@ -573,5 +576,24 @@ theme_override_font_sizes/font_size = 8
 text = "You made it!"
 horizontal_alignment = 1
 
-[node name="Slime2" parent="." instance=ExtResource("6_txt4n")]
-position = Vector2(134, -34)
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+offset_left = 332.0
+offset_top = 508.0
+offset_right = 809.0
+offset_bottom = 644.0
+
+[node name="Card" parent="CanvasLayer/HBoxContainer" instance=ExtResource("5_qiqea")]
+layout_mode = 2
+
+[node name="Card2" parent="CanvasLayer/HBoxContainer" instance=ExtResource("5_qiqea")]
+layout_mode = 2
+
+[node name="Card3" parent="CanvasLayer/HBoxContainer" instance=ExtResource("5_qiqea")]
+layout_mode = 2
+
+[node name="Card4" parent="CanvasLayer/HBoxContainer" instance=ExtResource("5_qiqea")]
+layout_mode = 2
+
+[node name="CardHolder" type="Node" parent="."]
